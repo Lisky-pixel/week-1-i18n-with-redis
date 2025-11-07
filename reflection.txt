@@ -1,0 +1,10 @@
+Q1: Explain the "Double Bottleneck" problem in your own words.
+A1: The double bottleneck refers to two repeated slow operations on each web request: (1) hitting the database to read Produce records, and (2) reading translation files (.mo) from disk for the active language. Together they increase request latency.
+
+Q2: What did request.LANGUAGE_CODE do in the cache tag?
+A2: Using request.LANGUAGE_CODE as part of the cache key creates a language-specific fragment cache (separate cached content per language). If left out the same cached HTML would be shown for all languages and users would see mismatched language content.
+
+Q3: What is the solution to stale cache when Produce changes?
+A3: Use signals (post_save/post_delete) to invalidate the cached template fragment when a Produce object changes. In Django you can use make_template_fragment_key and cache.delete inside signal handlers to remove the fragment cache.
+
+Bonus: Implemented farm/signals.py to invalidate the cached produce_list_fragment for available languages on save/delete.

@@ -1,0 +1,22 @@
+{% extends 'farm/base.html' %}
+{% load i18n %}
+{% load cache %}
+
+{% block content %}
+
+{% cache 600 produce_list_fragment request.LANGUAGE_CODE %}
+  <h2 class="text-2xl font-semibold mb-4">{% trans "Available Produce" %}</h2>
+
+  <div>
+    {% for produce in produce_list %}
+      <div>
+        <h3>{{ produce.name }}</h3>
+        <p>{{ produce.origin_village }}</p>
+      </div>
+    {% empty %}
+      <p>{% trans "No produce is currently available." %}</p>
+    {% endfor %}
+  </div>
+{% endcache %}
+
+{% endblock %}
